@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -49,6 +49,7 @@ export default {
       textarea2: '',
       textarea3: '',
       value: '武隆隧道进口右线',
+      secId: '',
       options: [{'id': 39, 'name': '武隆隧道进口右线'}, {'id': 34, 'name': '白马山二号隧道出口左线'}]
     }
   },
@@ -58,14 +59,24 @@ export default {
     },
     btnClick () {
       let formdata = new FormData()
-      formdata.append('value', this.value)
-      formdata.append('activeName', this.activeName)
-      formdata.append('textarea1', this.textarea1)
-      this.axios.post('/api/frontframe/api/upload/', formdata).then(res => {
+      this.handleSelect(this.value)
+      console.log(this.secId)
+      formdata.append('value', this.secId)
+      formdata.append('work_point_name', this.value)
+      formdata.append('content', this.textarea1)
+      formdata.append('type', 1)
+      axios.post('http://117.36.76.198:36695/dtu/show/', formdata).then(res => {
         if (res.status === 200) {
           this.path = res.path
-          this.getFileStatus()
           this.$message({type: 'success', message: res.data.msg})
+        }
+      })
+    },
+    handleSelect (val) {
+      this.options.forEach((item, index) => {
+        if (item.name === val) {
+          console.log(item.id)
+          this.secId = item.id
         }
       })
     }
@@ -80,9 +91,6 @@ export default {
 .alignLeft{text-align: left;}
  .el-row {
     margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
   .el-col {
     border-radius: 4px;

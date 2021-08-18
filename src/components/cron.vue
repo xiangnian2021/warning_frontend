@@ -16,7 +16,7 @@
         <el-col :span='24'>
           <div class='grid-content'>
             <el-input type='textarea' :rows='20' placeholder='请输入一级' v-model='textarea1'></el-input>
-            <el-button plain @click='btnClick'>提交</el-button>
+            <el-button plain @click="btnClick('first',textarea1)">提交</el-button>
           </div>
         </el-col>
       </el-tab-pane>
@@ -24,14 +24,14 @@
         <el-col :span='24'>
           <div class='grid-content'>
             <el-input type='textarea' :rows='20' placeholder='请输入二级' v-model='textarea2'></el-input>
-            <el-button plain>提交</el-button>
+            <el-button plain @click="btnClick('second',textarea2)">提交</el-button>
           </div>
         </el-col></el-tab-pane>
       <el-tab-pane label="三级" name="third">
         <el-col :span='24'>
         <div class='grid-content'>
           <el-input type='textarea' :rows='20' placeholder='请输入三级' v-model='textarea3'></el-input>
-          <el-button plain>提交</el-button>
+          <el-button plain @click="btnClick('third',textarea3)">提交</el-button>
         </div>
       </el-col>
       </el-tab-pane>
@@ -57,13 +57,14 @@ export default {
     handleClick (tab, event) {
       console.log(tab, event)
     },
-    btnClick () {
+    btnClick (type, textarea) {
       let formdata = new FormData()
       this.handleSelect(this.value)
       console.log(this.secId)
       formdata.append('value', this.secId)
       formdata.append('work_point_name', this.value)
-      formdata.append('content', this.textarea1)
+      formdata.append('type', type)
+      formdata.append('content', textarea)
       formdata.append('type', 1)
       axios.post('http://117.36.76.198:36695/dtu/show/', formdata).then(res => {
         if (res.status === 200) {

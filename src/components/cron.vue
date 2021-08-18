@@ -40,6 +40,7 @@
   </div>
 </template>
 <script>
+// import axios from 'axios'
 export default {
   data () {
     return {
@@ -56,6 +57,17 @@ export default {
       console.log(tab, event)
     },
     btnClick () {
+      let formdata = new FormData()
+      formdata.append('value', this.value)
+      formdata.append('activeName', this.activeName)
+      formdata.append('textarea1', this.textarea1)
+      this.axios.post('/api/frontframe/api/upload/', formdata).then(res => {
+        if (res.status === 200) {
+          this.path = res.path
+          this.getFileStatus()
+          this.$message({type: 'success', message: res.data.msg})
+        }
+      })
     }
   },
   created () {
